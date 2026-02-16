@@ -29,7 +29,7 @@
             margin: 10px 0;
             color: var(--dark);
         }
-        .status-text { margin-bottom: 20px; font-weight: bold; }
+        .status-text { margin-bottom: 20px; font-weight: bold; min-height: 1.5rem; }
         .controls { display: flex; flex-direction: column; align-items: center; }
         button { 
             padding: 20px; 
@@ -77,6 +77,7 @@
             numberDisplay.innerText = val; 
         });
 
+        // Fonction de clic
         function go(type) {
             socket.emit(type);
             
@@ -91,6 +92,11 @@
                 statusText.innerText = "Départ enregistré 🔴";
                 statusText.style.color = "#e74c3c";
             }
+        }
+
+        // Activation du mode "App" (Service Worker)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
         }
     </script>
 </body>
