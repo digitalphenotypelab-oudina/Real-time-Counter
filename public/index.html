@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/manifest.json">
+    <title>Compteur Présence Hôpital</title>
+    <style>
+        :root {
+            --primary: #27ae60;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+        }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            text-align: center; 
+            background: #f4f7f6; 
+            color: var(--dark);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
+        .display { 
+            font-size: 8rem; 
+            font-weight: bold; 
+            margin: 10px 0;
+            color: var(--dark);
+        }
+        .status-text { margin-bottom: 20px; font-weight: bold; }
+        .controls { display: flex; flex-direction: column; align-items: center; }
+        button { 
+            padding: 20px; 
+            font-size: 1.3rem; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            color: white; 
+            margin: 10px; 
+            width: 85%; 
+            max-width: 350px;
+            transition: transform 0.1s, opacity 0.3s;
+            font-weight: bold;
+        }
+        button:active { transform: scale(0.98); }
+        button:disabled { background: #bdc3c7 !important; cursor: not-allowed; opacity: 0.6; }
+        .in { background: var(--primary); box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); }
+        .out { background: var(--danger); box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3); }
+        .info { font-size: 0.8rem; margin-top: 30px; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+    <h1>Effectif sur site</h1>
+    <div class="display" id="number">...</div>
+    <div class="status-text" id="status">Veuillez signaler votre présence</div>
+
+    <div class="controls">
+        <button id="btnIn" class="in" onclick="go('entree')">JE SUIS ARRIVÉ ➕</button>
+        <button id="btnOut" class="out" onclick="go('sortie')" disabled>JE PARS ➖</button>
+    </div>
+
+    <p class="info">Anonymat total • Réinitialisé chaque soir</p>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const btnIn = document.getElementById('btnIn');
+        const btnOut = document.getElementById('btnOut');
+        const statusText = document.getElementById('status');
+        const numberDisplay = document.getElementById('number');
+
+        // Mise à jour du compteur en temps réel
+        socket.on('update', (val) => { 
+            numberDisplay.innerText = val; 
+        });
+
+        function go(type) {
+            socket.emit(type);
+            
+            if (type === 'entree') {
+                btnIn.disabled = true;
+                btnOut.disabled = false;
+                statusText.innerText = "Vous êtes comptabilisé(e) ✅";
+                statusText.style.color = "#27ae60";
+            } else {
+                btnIn.disabled = false;
+                btnOut.disabled = true;
+                statusText.innerText = "Départ enregistré 🔴";
+                statusText.style.color = "#e74c3c";
+            }
+        }
+    </script>
+</body>
+</html>

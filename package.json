@@ -1,0 +1,25 @@
+{
+  "name": "real-time-counter",
+  "version": "1.0.0",
+  "description": "Une web app ultra-légère pour suivre en temps réel l'effectif présent dans un service hospitalier, de manière totalement anonyme.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digitalphenotypelab-oudina/Real-time-Counter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/digitalphenotypelab-oudina/Real-time-Counter/issues"
+  },
+  "homepage": "https://github.com/digitalphenotypelab-oudina/Real-time-Counter#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}
